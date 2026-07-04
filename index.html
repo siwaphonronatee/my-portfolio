@@ -677,17 +677,16 @@ footer p{font-size:12.5px;color:var(--muted)}
   <div class="proj-card reveal">
     <div class="proj-top">
       <div class="proj-meta">
-        <span class="proj-name">Element</span>
+        <span class="proj-name">ElementA</span>
         <span class="proj-tag"></span>
       </div>
-      <p class="proj-sub">ตารางสูตรเคมีจำลอง · มหาวิทยาลัยราชภัฏพิบูลสงคราม</p>
+      <p class="proj-sub">ELEMENTAตารางธาตุพร้อมระบบจำลองปฏิกิริยาเคมี</p>
       <ul class="proj-list">
-        <li>เทรนโมเดล Isolation Forest จากข้อมูล sensor จริง 5,000 rows ด้วย Python และ scikit-learn</li>
-        <li>เชื่อมต่อ Firebase Realtime Database และสร้าง real-time data pipeline เก็บข้อมูลทุก 0.3 วินาที</li>
-        <li>วิเคราะห์และแก้ปัญหา Nested JSON ที่ทำให้ TypeError: float() ล้มเหลว</li>
-        <li>คัดเลือก Features: current, rpm, temperature, vibration และ Normalize ด้วย StandardScaler</li>
-        <li>ปรับแต่งโมเดลด้วย contamination=0.05 และ n_estimators=200 เพื่อความแม่นยำสูงสุด</li>
-        <li>บันทึกและส่งมอบ motor_model_v2.pkl และ scaler_v2.pkl ให้ทีม Dashboard ใช้งานต่อได้ทันที</li>
+        <li>พัฒนาเว็บแอปพลิเคชันตารางธาตุครบ 118 ธาตุ แบบ Interactive ด้วย HTML, CSS, JavaScript </li>
+        <li>ออกแบบฐานข้อมูลปฏิกิริยาเคมีเกือบ 200 คู่ธาตุ โดยค้นคว้าและตรวจสอบความถูกต้องของสมการเคมีจากแหล่งอ้างอิงทางวิทยาศาสตร์ก่อนบันทึกลงระบบ</li>
+        <li>สร้างระบบเลือกธาตุ (Element Selector) ที่ให้ผู้ใช้เลือกธาตุ 2 ชนิดมาจำลองปฏิกิริยา แล้วแสดงสมการ เงื่อนไข และคำอธิบายแบบเรียลไทม์</li>
+        <li>ออกแบบ UI/UX ด้วยแนวคิด Data Visualization โดยใช้สีแยกหมวดหมู่ธาตุ (โลหะแอลคาไล, ฮาโลเจน, แก๊สมีตระกูล ฯลฯ) พร้อมลูกเล่น Hover Animation และ Tooltip เพื่อเพิ่มประสบการณ์การเรียนรู้/li>
+        <li>จัดโครงสร้างไฟล์แบบ Self-contained Single-file Deployment เพื่อให้ใช้งานได้ทันทีโดยไม่ต้องพึ่งพาเซิร์ฟเวอร์ภายนอก/li>
       </ul>
     </div>
     <div class="proj-bottom">
