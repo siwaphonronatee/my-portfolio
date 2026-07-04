@@ -642,7 +642,7 @@ footer p{font-size:12.5px;color:var(--muted)}
     <div class="proj-top">
       <div class="proj-meta">
         <span class="proj-name">Motor Health Monitoring System</span>
-        <span class="proj-tag">2567 – Present</span>
+        <span class="proj-tag"></span>
       </div>
       <p class="proj-sub">ระบบตรวจสอบสุขภาพมอเตอร์ · มหาวิทยาลัยราชภัฏพิบูลสงคราม</p>
       <ul class="proj-list">
@@ -673,7 +673,44 @@ footer p{font-size:12.5px;color:var(--muted)}
       </div>
     </div>
   </div>
+  
+  <div class="proj-card reveal">
+    <div class="proj-top">
+      <div class="proj-meta">
+        <span class="proj-name">Element</span>
+        <span class="proj-tag"></span>
+      </div>
+      <p class="proj-sub">ตารางสูตรเคมีจำลอง · มหาวิทยาลัยราชภัฏพิบูลสงคราม</p>
+      <ul class="proj-list">
+        <li>เทรนโมเดล Isolation Forest จากข้อมูล sensor จริง 5,000 rows ด้วย Python และ scikit-learn</li>
+        <li>เชื่อมต่อ Firebase Realtime Database และสร้าง real-time data pipeline เก็บข้อมูลทุก 0.3 วินาที</li>
+        <li>วิเคราะห์และแก้ปัญหา Nested JSON ที่ทำให้ TypeError: float() ล้มเหลว</li>
+        <li>คัดเลือก Features: current, rpm, temperature, vibration และ Normalize ด้วย StandardScaler</li>
+        <li>ปรับแต่งโมเดลด้วย contamination=0.05 และ n_estimators=200 เพื่อความแม่นยำสูงสุด</li>
+        <li>บันทึกและส่งมอบ motor_model_v2.pkl และ scaler_v2.pkl ให้ทีม Dashboard ใช้งานต่อได้ทันที</li>
+      </ul>
+    </div>
+    <div class="proj-bottom">
+      <div class="proj-stat">
+        <div class="s-val">95.0%</div>
+        <div class="s-lbl">Normal Accuracy</div>
+      </div>
+      <div class="proj-stat">
+        <div class="s-val">82.2</div>
+        <div class="s-lbl">Health Score / 100</div>
+      </div>
+      <div class="proj-stat">
+        <div class="s-val">5,000</div>
+        <div class="s-lbl">Training Rows</div>
+      </div>
+      <div class="proj-stat">
+        <div class="s-val">0.3s</div>
+        <div class="s-lbl">Pipeline Interval</div>
+      </div>
+    </div>
+  </div>
 </section>
+
 
 <!-- CERTS -->
 <section id="certs">
