@@ -299,6 +299,40 @@ section{padding:88px 6%}
   margin-bottom:52px;
 }
 
+/* ── EDUCATION ── */
+#education{background:var(--bg)}
+.edu-wrap{
+  display:flex;flex-wrap:wrap;gap:24px;
+  align-items:stretch;
+}
+.edu-info{
+  flex:1 1 320px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card);
+  padding:28px 30px;
+}
+.edu-info h3{font-size:17px;font-weight:600;margin-bottom:4px;letter-spacing:-0.01em}
+.edu-info .edu-sub{font-size:13px;color:var(--muted);margin-bottom:4px}
+.edu-info .edu-period{font-family:var(--mono);font-size:12px;color:var(--accent)}
+.gpa-cards{display:flex;gap:16px;flex:1 1 320px}
+.gpa-card{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--card);
+  padding:26px 22px;
+  text-align:center;
+  transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
+}
+.gpa-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 12px 32px rgba(45,91,227,0.1)}
+.gpa-card .gpa-val{
+  font-size:38px;font-weight:600;
+  letter-spacing:-0.03em;color:var(--accent);
+  line-height:1;margin-bottom:8px;
+}
+.gpa-card .gpa-lbl{font-size:12px;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase}
+
 /* ── SKILLS ── */
 #skills{background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .skills-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
@@ -462,6 +496,7 @@ footer p{font-size:12.5px;color:var(--muted)}
   <span class="nav-logo">SR.dev</span>
   <ul class="nav-links">
     <li><a href="#hero">Home</a></li>
+    <li><a href="#education">Education</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#project">Project</a></li>
     <li><a href="#certs">Certificates</a></li>
@@ -524,6 +559,29 @@ footer p{font-size:12.5px;color:var(--muted)}
       <div class="term-line"><span class="hi">✓</span> 5000 rows loaded</div>
       <div class="term-line"><span class="hi">✓</span> Accuracy: <span class="hi">95.0%</span></div>
       <div class="term-line"><span class="dim">$</span> <span class="term-cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <p class="sec-eye reveal">Background</p>
+  <h2 class="sec-title reveal">Education</h2>
+  <div class="edu-wrap">
+    <div class="edu-info reveal">
+      <h3>Pibulsongkram Rajabhat University</h3>
+      <p class="edu-sub">Bachelor of Engineering — Computer Engineering</p>
+      <p class="edu-period">2023 – Present</p>
+    </div>
+    <div class="gpa-cards">
+      <div class="gpa-card reveal">
+        <div class="gpa-val">2.61</div>
+        <div class="gpa-lbl">Cumulative GPA</div>
+      </div>
+      <div class="gpa-card reveal">
+        <div class="gpa-val">2.88</div>
+        <div class="gpa-lbl">Major GPA</div>
+      </div>
     </div>
   </div>
 </section>
