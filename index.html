@@ -165,7 +165,7 @@ nav{
 #hero{
   min-height:100vh;
   display:grid;
-  grid-template-columns:1fr;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
   align-items:center;
   padding:80px 6% 60px;
   gap:40px;
@@ -202,11 +202,22 @@ h1{
   opacity:0;animation:fadeUp 0.6s 0.3s forwards;
 }
 .hero-desc{
-  color:#555;font-size:14.5px;
-  max-width:420px;line-height:1.85;
-  margin-bottom:36px;
+  max-width:560px;margin-bottom:34px;
+  display:flex;flex-direction:column;gap:14px;
   opacity:0;animation:fadeUp 0.6s 0.4s forwards;
 }
+.hero-desc p{
+  position:relative;padding-left:16px;
+  color:#4a4a4a;font-size:14.5px;line-height:1.9;
+  text-wrap:pretty;
+}
+.hero-desc p::before{
+  content:'';position:absolute;left:0;top:7px;bottom:7px;
+  width:2px;border-radius:2px;background:var(--accent);opacity:.35;
+}
+.hero-desc p.lead{font-size:15.5px;color:var(--ink)}
+.hero-desc b{font-weight:500;color:var(--ink)}
+.hero-desc .hl{color:var(--accent);font-weight:500}
 .hero-contacts{
   display:flex;flex-wrap:wrap;gap:10px;
   margin-bottom:36px;
@@ -244,7 +255,80 @@ h1{
   border:1px solid var(--line);
 }
 .btn-ghost:hover{border-color:var(--ink)}
+/* ── HERO RIGHT : interactive lab ── */
+.hero-right{position:relative;min-width:0;opacity:0;animation:fadeUp 0.7s 0.5s forwards}
+.lab{
+  --st:#1a7a4a;
+  background:rgba(255,255,255,0.72);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 20px 60px rgba(30,40,90,0.10);overflow:hidden;
+}
+.lab-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.lab-dots{display:flex;gap:6px}
+.lab-dots i{width:9px;height:9px;border-radius:50%;background:#d9d7cf;display:block}
+.lab-tabs{display:flex;gap:6px;margin-left:auto}
+.lab-tab{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  border:1px solid var(--line);background:transparent;color:var(--muted);
+  padding:5px 12px;border-radius:100px;cursor:pointer;transition:.2s;
+}
+.lab-tab:hover{color:var(--ink);border-color:var(--ink)}
+.lab-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.lab-body{padding:18px;min-height:390px}
+.lab-pane{display:none}
+.lab-pane.active{display:block;animation:fadeUp .4s}
+.lab-note{font-size:11px;color:var(--muted);margin-top:12px}
 
+/* motor */
+.m-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.m-state{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;color:var(--st);
+  background:color-mix(in srgb,var(--st) 12%,transparent);
+  border:1px solid color-mix(in srgb,var(--st) 35%,transparent);
+  padding:6px 14px;border-radius:100px;transition:.3s;
+}
+.m-pulse{width:8px;height:8px;border-radius:50%;background:var(--st);animation:mpulse 1.2s infinite}
+@keyframes mpulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--st) 55%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
+.m-conf{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.m-conf b{color:var(--ink);font-weight:500}
+.m-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.m-tile{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.m-tile span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted)}
+.m-tile b{font-size:22px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.m-wave{width:100%;height:130px;display:block;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.6)}
+.m-mqtt{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin:10px 0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-mqtt .dim{color:var(--accent);margin-right:6px}
+.m-mqtt code{color:var(--ink);font-family:inherit}
+.m-btns{display:flex;flex-wrap:wrap;gap:8px}
+.m-btns button{
+  font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  padding:6px 12px;border-radius:8px;cursor:pointer;transition:.2s;
+}
+.m-btns button:hover{border-color:var(--accent);color:var(--accent)}
+.m-btns button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* book */
+.b-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.b-title{font-size:13px;font-weight:600}
+.b-switch{display:flex;border:1px solid var(--line);border-radius:100px;overflow:hidden}
+.b-switch button{font-family:var(--mono);font-size:11px;border:none;background:transparent;color:var(--muted);padding:5px 12px;cursor:pointer;transition:.2s}
+.b-switch button.active{background:var(--accent);color:#fff}
+.b-chat{display:flex;flex-direction:column;gap:10px;min-height:290px}
+.b-msg{font-size:13.5px;line-height:1.7;padding:10px 14px;border-radius:14px;max-width:88%;min-height:20px}
+.b-msg:empty{display:none}
+.b-msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.b-msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
+.b-msg.bot::before{content:attr(data-llm);display:block;font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:2px}
+.b-sql{font-family:var(--mono);font-size:10.5px;color:var(--muted);white-space:pre-wrap;word-break:break-all;padding-left:10px;border-left:2px solid var(--line)}
+.b-sql:empty{display:none}
+.b-cards{display:grid;gap:8px}
+.b-card{
+  border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--card);
+  opacity:0;animation:fadeUp .4s forwards;
+}
+.b-card b{display:block;font-size:13px;font-weight:600}
+.b-card span{font-size:12px;color:var(--muted)}
 /* hero right — floating stat cards */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
@@ -514,13 +598,12 @@ footer p{font-size:12.5px;color:var(--muted)}
     <div class="hero-eyebrow">Computer Engineering · PSRU</div>
     <h1>Siwaphon<br>Ronatee</h1>
     <p class="hero-role">Software Developer</p>
-    <p class="hero-desc">
-        นักศึกษาวิศวกรรมคอมพิวเตอร์ที่มีความสนใจด้าน AI และ Software Developer 
-      มีประสบการณ์พัฒนาและฝึกโมเดล Random Forest สำหรับจำแนกความผิดปกติของมอเตอร์จากข้อมูลเซนเซอร์ 
-      โดยใช้ Python และ scikit-learn ครอบคลุมการเตรียมข้อมูล การประเมินโมเดล และการเชื่อมต่อข้อมูลแบบ Real-time ผ่าน MQTT
-      และสร้างระบบค้นหาหนังสือพร้อมผู้ช่วย AI ด้วย Python, FastAPI, SQLite รองรับทั้ง LLM ออฟไลน์ (Ollama) และออนไลน์ (Gemini API)
-      พร้อมเรียนรู้และพัฒนาทักษะอย่างต่อเนื่อง ต้องการนำทักษะไปใช้งานในตำแหน่ง AI/Data Engineer หรือ Software Developer ในสภาพแวดล้อมจริง
-    </p>
+        <div class="hero-desc">
+      <p class="lead">นักศึกษาวิศวกรรมคอมพิวเตอร์ที่มีความสนใจด้าน <span class="hl">AI</span> และ <span class="hl">Software Developer</span></p>
+      <p>มีประสบการณ์พัฒนาและฝึกโมเดล <b>Random Forest</b> สำหรับจำแนกความผิดปกติของมอเตอร์จากข้อมูลเซนเซอร์ โดยใช้ <b>Python</b> และ <b>scikit-learn</b> ครอบคลุมการเตรียมข้อมูล การประเมินโมเดล และการเชื่อมต่อข้อมูลแบบ Real-time ผ่าน <b>MQTT</b></p>
+      <p>และสร้างระบบค้นหาหนังสือพร้อมผู้ช่วย AI ด้วย <b>Python, FastAPI, SQLite</b> รองรับทั้ง LLM ออฟไลน์ (<b>Ollama</b>) และออนไลน์ (<b>Gemini API</b>)</p>
+      <p>พร้อมเรียนรู้และพัฒนาทักษะอย่างต่อเนื่อง ต้องการนำทักษะไปใช้งานในตำแหน่ง <span class="hl">AI/Data Engineer</span> หรือ <span class="hl">Software Developer</span> ในสภาพแวดล้อมจริง</p>
+    </div>
     <div class="hero-contacts">
       <a class="chip" href="mailto:siwaphonronatee@gmail.com">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
@@ -540,7 +623,56 @@ footer p{font-size:12.5px;color:var(--muted)}
       <a class="btn btn-ghost" href="#certs">Certificates</a>
     </div>
   </div>
+    <div class="hero-right">
+    <div class="lab" id="lab">
+      <div class="lab-bar">
+        <div class="lab-dots"><i></i><i></i><i></i></div>
+        <div class="lab-tabs">
+          <button class="lab-tab active" data-pane="motor">Motor AI</button>
+          <button class="lab-tab" data-pane="book">Book AI</button>
+        </div>
+      </div>
+      <div class="lab-body">
+        <div class="lab-pane active" id="pane-motor">
+          <div class="m-head">
+            <div class="m-state"><span class="m-pulse"></span><span id="mStateTxt">Normal</span></div>
+            <div class="m-conf">Random Forest · <b id="mConf">98</b>%</div>
+          </div>
+          <div class="m-grid">
+            <div class="m-tile"><span>RPM</span><b id="mRpm">1450</b></div>
+            <div class="m-tile"><span>TEMP °C</span><b id="mTemp">52.0</b></div>
+            <div class="m-tile"><span>VIB mm/s</span><b id="mVib">1.20</b></div>
+          </div>
+          <canvas id="mWave" class="m-wave"></canvas>
+          <div class="m-mqtt"><span class="dim">MQTT</span>motor/01/sensor <code id="mJson"></code></div>
+          <div class="m-btns" id="mBtns">
+            <button class="active" data-mode="normal">Normal</button>
+            <button data-mode="rpm">RPM Fault</button>
+            <button data-mode="temp">Temp Fault</button>
+            <button data-mode="vib">Vibration Fault</button>
+          </div>
+          <p class="lab-note">* ข้อมูลจำลองเพื่อสาธิตแนวคิดของโปรเจกต์ กดปุ่มเพื่อลองจำลองความผิดปกติ</p>
+        </div>
 
+        <div class="lab-pane" id="pane-book">
+          <div class="b-top">
+            <span class="b-title">ผู้ช่วยค้นหาหนังสือ</span>
+            <div class="b-switch" id="bSwitch">
+              <button class="active" data-llm="Ollama · offline">Ollama</button>
+              <button data-llm="Gemini API · online">Gemini</button>
+            </div>
+          </div>
+          <div class="b-chat">
+            <div class="b-msg user" id="bQ"></div>
+            <div class="b-sql" id="bSql"></div>
+            <div class="b-msg bot" id="bA" data-llm="Ollama · offline"></div>
+            <div class="b-cards" id="bCards"></div>
+          </div>
+          <p class="lab-note">* ตัวอย่างจำลองการทำงาน: FastAPI + SQLite + LLM</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- EDUCATION -->
@@ -887,6 +1019,141 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.getElementById('lightbox').classList.remove('open');
 });
 
+// ── HERO LAB (Motor AI / Book AI demo) ──
+(function(){
+  const lab=document.getElementById('lab'); if(!lab) return;
+  const $=id=>document.getElementById(id);
+  const rnd=(c,s)=>c+(Math.random()*2-1)*s;
+
+  /* tabs */
+  lab.querySelectorAll('.lab-tab').forEach(t=>t.addEventListener('click',()=>{
+    lab.querySelectorAll('.lab-tab').forEach(x=>x.classList.toggle('active',x===t));
+    lab.querySelectorAll('.lab-pane').forEach(p=>p.classList.toggle('active',p.id==='pane-'+t.dataset.pane));
+    if(t.dataset.pane==='book'){ bookRestart(); } else { bookToken++; fit(); }
+  }));
+
+  /* ---------- MOTOR ---------- */
+  const MODES={
+    normal:{label:'Normal',color:'#1a7a4a',rpm:[1450,12],temp:[52,1.2],vib:[1.2,.25],amp:.28,freq:.35},
+    rpm:   {label:'RPM Fault',color:'#d97706',rpm:[980,70],temp:[55,1.5],vib:[1.8,.4],amp:.4,freq:.2},
+    temp:  {label:'Temperature Fault',color:'#dc2626',rpm:[1445,15],temp:[89,2.5],vib:[1.5,.3],amp:.32,freq:.35},
+    vib:   {label:'Vibration Fault',color:'#7c3aed',rpm:[1440,25],temp:[58,2],vib:[6.5,1.2],amp:.95,freq:.9}
+  };
+  const order=['normal','rpm','temp','vib'];
+  let mode='normal', hover=false, pauseUntil=0;
+  const cur={rpm:1450,temp:52,vib:1.2};
+  let curAmp=.28, t=0, inView=true;
+  const samples=new Array(160).fill(0);
+
+  function setMode(m){
+    mode=m; const M=MODES[m];
+    lab.style.setProperty('--st',M.color);
+    $('mStateTxt').textContent=M.label;
+    $('mConf').textContent=Math.round(rnd(m==='normal'?98:95,2));
+    document.querySelectorAll('#mBtns button').forEach(b=>b.classList.toggle('active',b.dataset.mode===m));
+  }
+  document.querySelectorAll('#mBtns button').forEach(b=>b.addEventListener('click',()=>{
+    setMode(b.dataset.mode); pauseUntil=Date.now()+15000;
+  }));
+  lab.addEventListener('mouseenter',()=>hover=true);
+  lab.addEventListener('mouseleave',()=>hover=false);
+  setInterval(()=>{
+    if(hover||Date.now()<pauseUntil||!inView) return;
+    if(!$('pane-motor').classList.contains('active')) return;
+    setMode(order[(order.indexOf(mode)+1)%order.length]);
+  },4500);
+
+  setInterval(()=>{
+    const M=MODES[mode];
+    cur.rpm+=(rnd(M.rpm[0],M.rpm[1])-cur.rpm)*.35;
+    cur.temp+=(rnd(M.temp[0],M.temp[1])-cur.temp)*.25;
+    cur.vib+=(rnd(M.vib[0],M.vib[1])-cur.vib)*.35;
+    $('mRpm').textContent=Math.round(cur.rpm);
+    $('mTemp').textContent=cur.temp.toFixed(1);
+    $('mVib').textContent=cur.vib.toFixed(2);
+    $('mJson').textContent=`{"rpm":${Math.round(cur.rpm)},"temp":${cur.temp.toFixed(1)},"vib":${cur.vib.toFixed(2)}}`;
+  },250);
+
+  const cv=$('mWave'), cx=cv.getContext('2d'); let cw=0,ch=0;
+  function fit(){
+    const d=window.devicePixelRatio||1;
+    cw=cv.clientWidth; ch=cv.clientHeight; if(!cw) return;
+    cv.width=cw*d; cv.height=ch*d; cx.setTransform(d,0,0,d,0,0);
+  }
+  window.addEventListener('resize',fit);
+  new IntersectionObserver(es=>{inView=es[0].isIntersecting},{threshold:0.1}).observe(lab);
+
+  function wave(){
+    requestAnimationFrame(wave);
+    if(!inView||!cw||!$('pane-motor').classList.contains('active')) return;
+    const M=MODES[mode];
+    curAmp+=(M.amp-curAmp)*.05; t+=M.freq;
+    let v=curAmp*(Math.sin(t)*.7+Math.sin(t*2.3)*.3)+(Math.random()-.5)*curAmp*.25;
+    if(mode==='vib'&&Math.random()<.04) v+=(Math.random()-.5)*1.2;
+    samples.push(Math.max(-1,Math.min(1,v))); samples.shift();
+    cx.clearRect(0,0,cw,ch);
+    cx.strokeStyle='rgba(120,140,200,.15)'; cx.lineWidth=1;
+    for(let i=1;i<4;i++){cx.beginPath();cx.moveTo(0,ch*i/4);cx.lineTo(cw,ch*i/4);cx.stroke();}
+    cx.setLineDash([4,4]); cx.strokeStyle='rgba(220,38,38,.35)';
+    [.6,-.6].forEach(l=>{const y=ch/2-l*ch/2;cx.beginPath();cx.moveTo(0,y);cx.lineTo(cw,y);cx.stroke();});
+    cx.setLineDash([]);
+    cx.beginPath();
+    samples.forEach((s,i)=>{const x=i/(samples.length-1)*cw,y=ch/2-s*ch/2*.92;i?cx.lineTo(x,y):cx.moveTo(x,y);});
+    cx.strokeStyle=M.color; cx.lineWidth=2; cx.lineJoin='round';
+    cx.shadowColor=M.color; cx.shadowBlur=8; cx.stroke(); cx.shadowBlur=0;
+  }
+  setMode('normal'); fit(); wave();
+
+  /* ---------- BOOK ---------- */
+  const QA=[
+    {q:'แนะนำหนังสือ Machine Learning สำหรับมือใหม่',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%machine learning%' LIMIT 3;",
+     a:'พบ 3 เล่มที่เหมาะกับผู้เริ่มต้น เรียงจากลงมือทำไปจนถึงทฤษฎี',
+     books:[['Hands-On Machine Learning','Aurélien Géron'],['Python Machine Learning','Sebastian Raschka'],['An Introduction to Statistical Learning','James, Witten, Hastie, Tibshirani']]},
+    {q:'มีหนังสือ Python กับ FastAPI ไหม',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%python%' OR topic LIKE '%fastapi%';",
+     a:'มีทั้งเล่มพื้นฐาน Python และเล่มสร้าง Web API ด้วย FastAPI',
+     books:[['Fluent Python','Luciano Ramalho'],['FastAPI: Modern Python Web Development','Bill Lubanovic'],['Building Data Science Applications with FastAPI','François Voron']]},
+    {q:'อยากอ่านเรื่อง time series และข้อมูลเซนเซอร์',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%time series%';",
+     a:'เจอหนังสือเกี่ยวกับการวิเคราะห์ข้อมูลอนุกรมเวลา เหมาะกับงานข้อมูลเซนเซอร์',
+     books:[['Forecasting: Principles and Practice','Hyndman & Athanasopoulos'],['Practical Time Series Analysis','Aileen Nielsen'],['Time Series Forecasting in Python','Marco Peixeiro']]}
+  ];
+  let qi=0, bookToken=0, llm='Ollama · offline';
+
+  function typeText(el,text,speed,tk,done){
+    let i=0; el.textContent='';
+    (function step(){
+      if(tk!==bookToken) return;
+      el.textContent=text.slice(0,i++);
+      if(i<=text.length) setTimeout(step,speed); else if(done) done();
+    })();
+  }
+  function later(fn,ms,tk){ setTimeout(()=>{ if(tk===bookToken) fn(); },ms); }
+
+  function bookRun(tk){
+    const d=QA[qi%QA.length];
+    $('bQ').textContent=''; $('bSql').textContent=''; $('bA').textContent=''; $('bCards').innerHTML='';
+    $('bA').dataset.llm=llm;
+    typeText($('bQ'),d.q,28,tk,()=>later(()=>
+      typeText($('bSql'),d.sql,10,tk,()=>later(()=>
+        typeText($('bA'),d.a,22,tk,()=>{
+          d.books.forEach((b,i)=>{
+            const c=document.createElement('div'); c.className='b-card'; c.style.animationDelay=(i*.15)+'s';
+            const t1=document.createElement('b'); t1.textContent=b[0];
+            const s1=document.createElement('span'); s1.textContent=b[1];
+            c.append(t1,s1); $('bCards').appendChild(c);
+          });
+          later(()=>{ qi++; bookRun(tk); },5500,tk);
+        }),300,tk)),300,tk));
+  }
+  function bookRestart(){ bookToken++; bookRun(bookToken); }
+
+  document.querySelectorAll('#bSwitch button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#bSwitch button').forEach(x=>x.classList.toggle('active',x===b));
+    llm=b.dataset.llm; bookRestart();
+  }));
+})();
 </script>
 </body>
 </html>
