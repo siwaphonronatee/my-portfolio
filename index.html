@@ -104,7 +104,7 @@ body::after{
 
 /* ── CERT THUMB ── */
 .cert-thumb{
-  width:100%;aspect-ratio:16/11;
+  width:100%;aspect-ratio:16/9;
   object-fit:cover;object-position:top;
   border-radius:8px 8px 0 0;
   display:block;
@@ -114,7 +114,7 @@ body::after{
 }
 .cert-card:hover .cert-thumb{transform:scale(1.02);filter:brightness(1)}
 .cert-card{padding:0;overflow:hidden}
-.cert-body-wrap{padding:20px 22px 22px}
+.cert-body-wrap{padding:14px 6px 6px}
 
 /* ── CURSOR DOT ── */
 .cursor{
@@ -160,6 +160,19 @@ nav{
 }
 .nav-links a:hover{color:var(--ink)}
 .nav-links a:hover::after{width:100%}
+.nav-right{display:flex;align-items:center;gap:28px}
+.lang-toggle{
+  display:flex;border:1px solid var(--line);border-radius:100px;
+  overflow:hidden;background:rgba(255,255,255,0.6);
+}
+.lang-toggle button{
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  border:none;background:transparent;color:var(--muted);
+  padding:5px 11px;cursor:pointer;transition:background .2s,color .2s;
+}
+.lang-toggle button:hover{color:var(--ink)}
+.lang-toggle button.active{background:var(--accent);color:#fff}
+@media(max-width:700px){.nav-links{display:none}}  /* ซ่อนเมนูบนมือถือเพื่อให้ปุ่ม TH/EN ไม่ล้นจอ (ลบได้ถ้าไม่ต้องการ) */
 
 /* ── HERO ── */
 #hero{
@@ -460,7 +473,7 @@ section{padding:88px 6%}
 
 /* ── HOBBIES ── */
 #hobbies{background:var(--bg)}
-.hobby-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,380px));gap:24px}
+.hobby-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,380px));gap:24px;justify-content:center}
 @media(max-width:800px){.hobby-grid{grid-template-columns:1fr}}
 .hobby-card{border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;transition:box-shadow 0.25s,transform 0.25s}
 .hobby-card:hover{box-shadow:0 16px 48px rgba(0,0,0,0.09);transform:translateY(-3px)}
@@ -519,10 +532,10 @@ section{padding:88px 6%}
 
 /* ── CERTS ── */
 #certs{background:rgba(255,255,255,0.6);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-.certs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.certs-grid{display:grid;grid-template-columns:repeat(3,minmax(0,360px));gap:20px;justify-content:center}
 .cert-card{
   border:1px solid var(--line);border-radius:12px;
-  padding:26px;
+  padding:14px;
   transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;
   position:relative;overflow:hidden;
 }
@@ -581,14 +594,20 @@ footer p{font-size:12.5px;color:var(--muted)}
 <!-- NAV -->
 <nav>
   <span class="nav-logo">SR.dev</span>
-  <ul class="nav-links">
-    <li><a href="#hero">Home</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#project">Project</a></li>
-    <li><a href="#certs">Certificates</a></li>
-    <li><a href="#hobbies">Activities</a></li>
-  </ul>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#project">Project</a></li>
+      <li><a href="#certs">Certificates</a></li>
+      <li><a href="#hobbies">Activities</a></li>
+    </ul>
+    <div class="lang-toggle" id="langToggle">
+      <button data-lang="th" class="active">TH</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -1132,7 +1151,8 @@ document.addEventListener('keydown',e=>{
   function later(fn,ms,tk){ setTimeout(()=>{ if(tk===bookToken) fn(); },ms); }
 
   function bookRun(tk){
-    const d=QA[qi%QA.length];
+    const list=(window.LANG==='en'&&window.QA_EN)?window.QA_EN:QA;
+    const d=list[qi%list.length];
     $('bQ').textContent=''; $('bSql').textContent=''; $('bA').textContent=''; $('bCards').innerHTML='';
     $('bA').dataset.llm=llm;
     typeText($('bQ'),d.q,28,tk,()=>later(()=>
@@ -1148,11 +1168,149 @@ document.addEventListener('keydown',e=>{
         }),300,tk)),300,tk));
   }
   function bookRestart(){ bookToken++; bookRun(bookToken); }
+  window.addEventListener('langchange',()=>{ if($('pane-book').classList.contains('active')) bookRestart(); });
 
   document.querySelectorAll('#bSwitch button').forEach(b=>b.addEventListener('click',()=>{
     document.querySelectorAll('#bSwitch button').forEach(x=>x.classList.toggle('active',x===b));
     llm=b.dataset.llm; bookRestart();
   }));
+})();
+
+// ── LANGUAGE TOGGLE (TH / EN) ──
+// TH = ข้อความเดิมในหน้า, EN = แปลตามตารางด้านล่าง (key = ข้อความไทยเดิมแบบตัดช่องว่างซ้ำ)
+(function(){
+  const TH_RE=/[\u0E00-\u0E7F]/;
+  const norm=s=>s.replace(/\s+/g,' ').trim();
+
+  const EN=new Map([
+    [`นักศึกษาวิศวกรรมคอมพิวเตอร์ที่มีความสนใจด้าน <span class="hl">AI</span> และ <span class="hl">Software Developer</span>`,
+     `Computer engineering student with an interest in <span class="hl">AI</span> and <span class="hl">Software Development</span>`],
+    [`มีประสบการณ์พัฒนาและฝึกโมเดล <b>Random Forest</b> สำหรับจำแนกความผิดปกติของมอเตอร์จากข้อมูลเซนเซอร์ โดยใช้ <b>Python</b> และ <b>scikit-learn</b> ครอบคลุมการเตรียมข้อมูล การประเมินโมเดล และการเชื่อมต่อข้อมูลแบบ Real-time ผ่าน <b>MQTT</b>`,
+     `Experienced in developing and training a <b>Random Forest</b> model to classify motor faults from sensor data using <b>Python</b> and <b>scikit-learn</b>, covering data preparation, model evaluation and real-time data integration via <b>MQTT</b>`],
+    [`และสร้างระบบค้นหาหนังสือพร้อมผู้ช่วย AI ด้วย <b>Python, FastAPI, SQLite</b> รองรับทั้ง LLM ออฟไลน์ (<b>Ollama</b>) และออนไลน์ (<b>Gemini API</b>)`,
+     `Also built a book search system with an AI assistant using <b>Python, FastAPI, SQLite</b>, supporting both offline (<b>Ollama</b>) and online (<b>Gemini API</b>) LLMs`],
+    [`พร้อมเรียนรู้และพัฒนาทักษะอย่างต่อเนื่อง ต้องการนำทักษะไปใช้งานในตำแหน่ง <span class="hl">AI/Data Engineer</span> หรือ <span class="hl">Software Developer</span> ในสภาพแวดล้อมจริง`,
+     `Eager to keep learning and improving, and looking to apply my skills as an <span class="hl">AI/Data Engineer</span> or <span class="hl">Software Developer</span> in a real-world environment`],
+    [`* ข้อมูลจำลองเพื่อสาธิตแนวคิดของโปรเจกต์ กดปุ่มเพื่อลองจำลองความผิดปกติ`,
+     `* Simulated data to demonstrate the project concept. Click the buttons to try simulating faults`],
+    [`ผู้ช่วยค้นหาหนังสือ`,
+     `Book Search Assistant`],
+    [`* ตัวอย่างจำลองการทำงาน: FastAPI + SQLite + LLM`,
+     `* Simulated demo of how it works: FastAPI + SQLite + LLM`],
+    [`2569 – ปัจจุบัน`,
+     `2026 – Present`],
+    [`มหาวิทยาลัยราชภัฏพิบูลสงคราม`,
+     `Pibulsongkram Rajabhat University`],
+    [`คณะวิศวกรรมศาสตร์และเทคโนโลยีอุตสาหกรรม · สาขาวิศวกรรมคอมพิวเตอร์`,
+     `Faculty of Engineering and Industrial Technology · Computer Engineering`],
+    [`วิทยาลัยเทคโนโลยีเซนต์นีโอ`,
+     `Saint Neo College of Technology`],
+    [`ประกาศนียบัตรวิชาชีพ (ปวช.) · สาขาคอมพิวเตอร์ธุรกิจ`,
+     `Vocational Certificate (Voc. Cert.) · Business Computing`],
+    [`เกรดเฉลี่ย`,
+     `GPA`],
+    [`โรงเรียนเซนต์มารีอา ชนแดน`,
+     `Saint Maria School, Chon Daen`],
+    [`มัธยมศึกษาตอนต้น · สายวิทย์-คณิต`,
+     `Lower Secondary School · Science–Mathematics Program`],
+    [`ระบบตรวจสอบสุขภาพมอเตอร์ | 2568 – ปัจจุบัน`,
+     `Motor health monitoring system | 2025 – Present`],
+    [`พัฒนาโมเดล Machine Learning ด้วย Random Forest Classifier สำหรับจำแนกสถานะมอเตอร์ 4 ประเภท ได้แก่ Normal, RPM Fault, Temperature Fault และ Vibration Fault`,
+     `Developed a machine learning model using a Random Forest Classifier to classify motors into 4 states: Normal, RPM Fault, Temperature Fault and Vibration Fault`],
+    [`เตรียมและจัดการ Dataset จากข้อมูลเซนเซอร์ โดยใช้ 7 Features ได้แก่ RPM, Temperature, Vibration (X, Y, Z), Current และ PWM`,
+     `Prepared and managed a dataset from sensor data using 7 features: RPM, Temperature, Vibration (X, Y, Z), Current and PWM`],
+    [`ฝึกโมเดลด้วย Decision Trees จำนวน 100 ต้น พร้อมวิเคราะห์ Feature Importance เพื่อศึกษาปัจจัยที่มีผลต่อการจำแนกสถานะมอเตอร์`,
+     `Trained the model with 100 decision trees and analyzed feature importance to study which factors affect motor state classification`],
+    [`ประเมินโมเดลด้วย Accuracy, Classification Report และ Confusion Matrix พร้อมวิเคราะห์ตัวอย่างที่ทำนายผิด`,
+     `Evaluated the model with accuracy, classification report and confusion matrix, and analyzed misclassified samples`],
+    [`บันทึกโมเดลด้วย Joblib (motor_rf_model.pkl) เพื่อรองรับการนำไปใช้ทำนายข้อมูลมอเตอร์และเชื่อมต่อกับระบบ MQTT`,
+     `Saved the model with Joblib (motor_rf_model.pkl) to support motor-data prediction and integration with the MQTT system`],
+    [`ระบบค้นหา แนะนำ และเปรียบเทียบหนังสือด้วยผู้ช่วย AI | 2569`,
+     `AI-assisted book search, recommendation and comparison system | 2026`],
+    [`พัฒนาเว็บค้นหาและแนะนำหนังสือ (FastAPI, SQLite, JavaScript) จากข้อมูลประมาณ 13,000 เล่มที่รวบรวมจาก Open Library API`,
+     `Developed a book search and recommendation website (FastAPI, SQLite, JavaScript) from roughly 13,000 books collected from the Open Library API`],
+    [`ผู้ช่วย AI 2 โหมด: ออฟไลน์ด้วย Ollama + Pathumma-7B และออนไลน์ด้วย Gemini API`,
+     `Two AI assistant modes: offline with Ollama + Pathumma-7B, and online with the Gemini API`],
+    [`ออกแบบให้ข้อเท็จจริงตอบจากฐานข้อมูล ส่วน LLM ช่วยสรุป เปรียบเทียบ และแปลเรื่องย่อ พร้อมระบบแก้คำพิมพ์ผิดและถามกลับเมื่อไม่แน่ใจ`,
+     `Designed so that facts are answered from the database, while the LLM helps summarize, compare and translate synopses, with typo correction and clarifying questions when unsure`],
+    [`ตารางธาตุพร้อมระบบจำลองปฏิกิริยาเคมี | 2569`,
+     `Interactive periodic table with chemical reaction simulator | 2026`],
+    [`พัฒนาเว็บแอปตารางธาตุครบ 118 ธาตุ ด้วย HTML, CSS, JavaScript แบบ Single-file ใช้งานได้ทันทีโดยไม่ต้องพึ่งเซิร์ฟเวอร์`,
+     `Built a complete 118-element periodic table web app in HTML, CSS and JavaScript as a single file that works instantly without a server`],
+    [`ออกแบบฐานข้อมูลปฏิกิริยาเคมีเกือบ 200 คู่ธาตุ โดยค้นคว้าและตรวจสอบความถูกต้องจากแหล่งอ้างอิงทางวิทยาศาสตร์ก่อนบันทึกลงระบบ`,
+     `Designed a reaction database of nearly 200 element pairs, researching and verifying each entry against scientific references before adding it to the system`],
+    [`สร้างระบบเลือก 2 ธาตุเพื่อจำลองปฏิกิริยา แสดงสมการ เงื่อนไข และคำอธิบายแบบเรียลไทม์`,
+     `Built a two-element selection system that simulates the reaction and shows the equation, conditions and an explanation in real time`],
+    [`ออกแบบ UI/UX แบบ Data Visualization แยกสีตามหมวดธาตุ พร้อม Hover Animation, Tooltip และชื่อธาตุภาษาไทย`,
+     `Designed a data-visualization-style UI with colors by element category, hover animation, tooltips and Thai element names`],
+    [`การใช้เครื่องมือ AI เพื่อสนับสนุนการวิจัย`,
+     `Using AI Tools to Support Research`],
+    [`สถาบันเทคโนโลยีดิจิทัล มรภ.พิบูลสงคราม · รุ่นที่ 1`,
+     `Institute of Digital Technology, PSRU · Batch 1`],
+    [`Digital Innovation Hub · มรภ.พิบูลสงคราม`,
+     `Digital Innovation Hub · PSRU`],
+    [`การควบคุมหุ่นยนต์อุตสาหกรรมสำหรับการจับชิ้นงาน`,
+     `Industrial Robot Control for Workpiece Handling`],
+    [`กรมพัฒนาฝีมือแรงงาน กระทรวงแรงงาน · 30 ชั่วโมง`,
+     `Department of Skill Development, Ministry of Labour · 30 hours`],
+    [`กิจกรรม`,
+     `Activities`],
+    [`กิจกรรมมหาวิทยาลัย`,
+     `University Activities`],
+    [`ร่วมนำเสนอโครงการ AI Tech Startup และกิจกรรมทีมโปรเจกต์ Motor Health Monitoring System`,
+     `Presented the AI Tech Startup project and took part in team activities for the Motor Health Monitoring System`],
+  ]);
+
+  // ข้อความตัวอย่างแชทในแท็บ Book AI (ใช้ตอนเป็นโหมด EN)
+  window.QA_EN=[
+    {q:'Recommend Machine Learning books for beginners',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%machine learning%' LIMIT 3;",
+     a:'Found 3 books suitable for beginners, ordered from hands-on to theory',
+     books:[['Hands-On Machine Learning','Aurélien Géron'],['Python Machine Learning','Sebastian Raschka'],['An Introduction to Statistical Learning','James, Witten, Hastie, Tibshirani']]},
+    {q:'Do you have books on Python and FastAPI?',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%python%' OR topic LIKE '%fastapi%';",
+     a:'There are both Python fundamentals and books on building web APIs with FastAPI',
+     books:[['Fluent Python','Luciano Ramalho'],['FastAPI: Modern Python Web Development','Bill Lubanovic'],['Building Data Science Applications with FastAPI','François Voron']]},
+    {q:'I want to read about time series and sensor data',
+     sql:"SELECT title, author FROM books\nWHERE topic LIKE '%time series%';",
+     a:'Found books on time series analysis, suited to sensor data work',
+     books:[['Forecasting: Principles and Practice','Hyndman & Athanasopoulos'],['Practical Time Series Analysis','Aileen Nielsen'],['Time Series Forecasting in Python','Marco Peixeiro']]}
+  ];
+
+  // เก็บทุก element ที่มีข้อความไทย (และปีการศึกษา) ไว้ตั้งแต่โหลดหน้า
+  const units=[];
+  document.querySelectorAll('body *').forEach(el=>{
+    if(el.closest('svg,script,style,canvas,#bQ,#bSql,#bA,#bCards')) return;
+    const own=[...el.childNodes].some(n=>n.nodeType===3&&TH_RE.test(n.nodeValue));
+    if(own||el.matches('.edu-year')) units.push({el,orig:el.innerHTML,key:norm(el.innerHTML)});
+  });
+
+  function toEn(u){
+    if(EN.has(u.key)) return EN.get(u.key);
+    if(/^25\d\d$/.test(u.key)) return String(+u.key-543);   // พ.ศ. → ค.ศ.
+    return null;
+  }
+
+  const btns=document.querySelectorAll('#langToggle button');
+  function apply(lang){
+    window.LANG=lang;
+    document.documentElement.lang=lang;
+    units.forEach(u=>{
+      if(lang==='en'){
+        const t=toEn(u);
+        if(t!==null) u.el.innerHTML=t;
+        else if(TH_RE.test(u.key)) console.warn('ยังไม่มีคำแปล EN:',u.key);
+      } else u.el.innerHTML=u.orig;
+    });
+    btns.forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    try{ localStorage.setItem('lang',lang); }catch(e){}
+    window.dispatchEvent(new Event('langchange'));
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>apply(b.dataset.lang)));
+
+  let saved='th';
+  try{ saved=localStorage.getItem('lang')==='en'?'en':'th'; }catch(e){}
+  apply(saved);
 })();
 </script>
 </body>
